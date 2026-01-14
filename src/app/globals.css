@@ -1,0 +1,311 @@
+@import "tailwindcss";
+
+/* Reactive AI Color Scheme */
+:root {
+  /* Base colors - Light theme */
+  --background: #ffffff;
+  --background-secondary: #f8f9fa;
+  --background-tertiary: #f0f1f2;
+  --foreground: #171717;
+  --foreground-secondary: #4a4a4a;
+  --foreground-muted: #6b7280;
+
+  /* Brand colors */
+  --primary: #f97316;
+  --primary-hover: #ea580c;
+  --primary-gradient-start: #f97316;
+  --primary-gradient-end: #dc2626;
+
+  /* Accent colors */
+  --accent-green: #22c55e;
+  --accent-green-bg: rgba(34, 197, 94, 0.1);
+  --accent-red: #ef4444;
+  --accent-red-bg: rgba(239, 68, 68, 0.1);
+  --accent-blue: #3b82f6;
+  --accent-blue-bg: rgba(59, 130, 246, 0.1);
+  --accent-purple: #8b5cf6;
+  --accent-purple-bg: rgba(139, 92, 246, 0.1);
+  --accent-yellow: #eab308;
+  --accent-yellow-bg: rgba(234, 179, 8, 0.1);
+
+  /* UI colors */
+  --border: #e5e7eb;
+  --border-hover: #d1d5db;
+  --input-bg: #ffffff;
+  --card-bg: #ffffff;
+  --card-bg-hover: #f9fafb;
+
+  /* Sidebar colors */
+  --sidebar-bg: #f8f9fa;
+  --sidebar-item-hover: #e5e7eb;
+  --sidebar-item-active: #e5e7eb;
+
+  /* Chat colors */
+  --chat-user-bg: #f3f4f6;
+  --chat-assistant-bg: #ffffff;
+  --chat-thinking-bg: rgba(139, 92, 246, 0.05);
+  --chat-tool-bg: rgba(59, 130, 246, 0.05);
+
+  /* Scrollbar */
+  --scrollbar-track: #f1f1f1;
+  --scrollbar-thumb: #c1c1c1;
+  --scrollbar-thumb-hover: #a1a1a1;
+}
+
+/* Dark theme */
+.dark {
+  --background: #0a0a0a;
+  --background-secondary: #141414;
+  --background-tertiary: #1a1a1a;
+  --foreground: #ededed;
+  --foreground-secondary: #a1a1a1;
+  --foreground-muted: #6b7280;
+
+  /* Brand colors stay vibrant */
+  --primary: #f97316;
+  --primary-hover: #fb923c;
+  --primary-gradient-start: #f97316;
+  --primary-gradient-end: #dc2626;
+
+  /* Accent colors - slightly adjusted for dark */
+  --accent-green: #22c55e;
+  --accent-green-bg: rgba(34, 197, 94, 0.15);
+  --accent-red: #ef4444;
+  --accent-red-bg: rgba(239, 68, 68, 0.15);
+  --accent-blue: #3b82f6;
+  --accent-blue-bg: rgba(59, 130, 246, 0.15);
+  --accent-purple: #a78bfa;
+  --accent-purple-bg: rgba(167, 139, 250, 0.15);
+  --accent-yellow: #facc15;
+  --accent-yellow-bg: rgba(250, 204, 21, 0.15);
+
+  /* UI colors */
+  --border: #2a2a2a;
+  --border-hover: #3a3a3a;
+  --input-bg: #141414;
+  --card-bg: #141414;
+  --card-bg-hover: #1a1a1a;
+
+  /* Sidebar colors */
+  --sidebar-bg: #0f0f0f;
+  --sidebar-item-hover: #1f1f1f;
+  --sidebar-item-active: #252525;
+
+  /* Chat colors */
+  --chat-user-bg: #1a1a1a;
+  --chat-assistant-bg: #0f0f0f;
+  --chat-thinking-bg: rgba(139, 92, 246, 0.1);
+  --chat-tool-bg: rgba(59, 130, 246, 0.1);
+
+  /* Scrollbar */
+  --scrollbar-track: #1a1a1a;
+  --scrollbar-thumb: #3a3a3a;
+  --scrollbar-thumb-hover: #4a4a4a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
+  --color-background-tertiary: var(--background-tertiary);
+  --color-foreground: var(--foreground);
+  --color-foreground-secondary: var(--foreground-secondary);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-border: var(--border);
+  --color-border-hover: var(--border-hover);
+  --color-input-bg: var(--input-bg);
+  --color-card-bg: var(--card-bg);
+  --color-card-bg-hover: var(--card-bg-hover);
+  --color-sidebar-bg: var(--sidebar-bg);
+  --color-sidebar-item-hover: var(--sidebar-item-hover);
+  --color-sidebar-item-active: var(--sidebar-item-active);
+  --color-accent-green: var(--accent-green);
+  --color-accent-green-bg: var(--accent-green-bg);
+  --color-accent-red: var(--accent-red);
+  --color-accent-red-bg: var(--accent-red-bg);
+  --color-accent-blue: var(--accent-blue);
+  --color-accent-blue-bg: var(--accent-blue-bg);
+  --color-accent-purple: var(--accent-purple);
+  --color-accent-purple-bg: var(--accent-purple-bg);
+  --color-accent-yellow: var(--accent-yellow);
+  --color-accent-yellow-bg: var(--accent-yellow-bg);
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* Base styles */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Focus styles */
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Selection */
+::selection {
+  background: rgba(249, 115, 22, 0.3);
+  color: var(--foreground);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Gradient button */
+.gradient-button {
+  background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
+  transition: all 0.2s ease;
+}
+
+.gradient-button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* Code blocks */
+pre, code {
+  font-family: var(--font-mono), 'Fira Code', monospace;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Streaming cursor */
+.streaming-cursor::after {
+  content: '|';
+  animation: pulse 1s ease-in-out infinite;
+  color: var(--primary);
+}
+
+/* Message markdown styles */
+.message-content h1,
+.message-content h2,
+.message-content h3 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.message-content h1 { font-size: 1.5rem; }
+.message-content h2 { font-size: 1.25rem; }
+.message-content h3 { font-size: 1.125rem; }
+
+.message-content p {
+  margin-bottom: 0.75rem;
+}
+
+.message-content ul,
+.message-content ol {
+  margin-left: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.message-content li {
+  margin-bottom: 0.25rem;
+}
+
+.message-content code {
+  background: var(--background-tertiary);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+}
+
+.message-content pre {
+  background: var(--background-tertiary);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin-bottom: 0.75rem;
+}
+
+.message-content pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.message-content strong {
+  font-weight: 600;
+}
+
+.message-content a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.message-content blockquote {
+  border-left: 3px solid var(--primary);
+  padding-left: 1rem;
+  margin-left: 0;
+  margin-bottom: 0.75rem;
+  color: var(--foreground-secondary);
+}
