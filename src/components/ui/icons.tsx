@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import {
   MessageSquare,
   Settings,
@@ -94,34 +95,24 @@ export {
 
 export type { LucideIcon };
 
-// Custom Reactive AI logo as SVG component
 export const ReactiveAILogo = ({ className = '', size = 40 }: { className?: string; size?: number }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 100 100"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-  >
-    {/* Infinity symbol with gradient */}
-    <defs>
-      <linearGradient id="infinityGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stopColor="#f97316" />
-        <stop offset="50%" stopColor="#ffffff" />
-        <stop offset="100%" stopColor="#f97316" />
-      </linearGradient>
-    </defs>
-    <path
-      d="M25 50C25 38.954 33.954 30 45 30C52.5 30 58.5 34 62 40C65.5 34 71.5 30 79 30C90.046 30 99 38.954 99 50C99 61.046 90.046 70 79 70C71.5 70 65.5 66 62 60C58.5 66 52.5 70 45 70C33.954 70 25 61.046 25 50Z"
-      stroke="url(#infinityGradient)"
-      strokeWidth="4"
-      fill="none"
+    <Image
+        src="/logo_rxai.png"
+        alt="Reactive AI"
+        width={size}
+        height={size}
+        className={`w-24 md:w-30 h-24 md:h-30 shadow-logo transition-all duration-300 ${className}`}
     />
-    {/* Grid pattern on the loops */}
-    <ellipse cx="37" cy="50" rx="10" ry="15" stroke="#ffffff40" strokeWidth="1" fill="none" />
-    <ellipse cx="87" cy="50" rx="10" ry="15" stroke="#ffffff40" strokeWidth="1" fill="none" />
-  </svg>
+);
+
+export const BetaLogo = ({ className = '', size = 40 }: { className?: string; size?: number }) => (
+    <Image
+        src="/logo_rxt_beta.png"
+        alt="Reactive AI"
+        width={size}
+        height={size}
+        className={`w-24 md:w-30 h-24 md:h-30 shadow-logo transition-all duration-300 ${className}`}
+    />
 );
 
 // Memory icon for MoM visualization

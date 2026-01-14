@@ -30,8 +30,7 @@ export default function HomePage() {
       <header className="border-b border-[var(--border)] bg-[var(--background)]">
         <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <ReactiveAILogo size={32} />
-            <span className="font-semibold text-[var(--foreground)]">Reactive AI</span>
+            <span className="font-semibold text-[var(--foreground)]">Reactive Chat</span>
           </div>
           <div className="flex items-center gap-2">
             <Button variant="ghost" onClick={() => router.push('/docs')}>
@@ -52,8 +51,8 @@ export default function HomePage() {
         <div className="max-w-4xl text-center">
           {/* Logo */}
           <div className="inline-block mb-8">
-            <div className="w-32 h-32 rounded-3xl bg-gradient-to-br from-[var(--background-secondary)] to-[var(--background-tertiary)] border border-[var(--border)] flex items-center justify-center shadow-2xl shadow-[var(--primary)]/10">
-              <ReactiveAILogo size={80} />
+            <div className="flex items-center justify-center">
+              <ReactiveAILogo size={200} />
             </div>
           </div>
 

@@ -47,7 +47,6 @@ export function Header() {
         </button>
 
         <div className="flex items-center gap-2">
-          <ReactiveAILogo size={32} />
           <div className="hidden sm:flex flex-col">
             <span className="text-sm font-semibold text-[var(--foreground)]">
               RxT-Beta
