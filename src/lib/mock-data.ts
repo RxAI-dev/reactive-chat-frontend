@@ -25,6 +25,7 @@ const createMockInteractions = (): Interaction[] => {
   const interactionId1 = uuidv4();
   const interactionId2 = uuidv4();
   const interactionId3 = uuidv4();
+  const interactionId4 = uuidv4();
 
   return [
     // Simple fast answer interaction

@@ -102,7 +102,7 @@ export interface Plan {
 export interface Settings {
   theme: 'dark' | 'light' | 'system';
   language: string;
-  defaultReasoningMode: 'fast' | 'extended';
+  defaultReasoningMode: 'fast' | 'extended' | 'auto';
   streamingSpeed: 'slow' | 'normal' | 'fast';
   showThinkingProcess: boolean;
   notifications: boolean;

@@ -4,7 +4,7 @@ import { useAppStore } from '@/store';
 import { MainLayout } from '@/components/layout/main-layout';
 import { useTheme } from '@/components/ui/theme-provider';
 import { Button } from '@/components/ui/button';
-import { Moon, Sun, Monitor, Zap, ThinkingIcon, Bell, Globe } from '@/components/ui/icons';
+import {Moon, Sun, Monitor, Zap, ThinkingIcon, Bell, Globe, Brain} from '@/components/ui/icons';
 
 export default function SettingsPage() {
   const { settings, updateSettings, user } = useAppStore();
@@ -76,7 +76,31 @@ export default function SettingsPage() {
               Default Reasoning Mode
             </h2>
             <div className="bg-[var(--card-bg)] border border-[var(--border)] rounded-xl p-4">
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-3 gap-2">
+                <button
+                    onClick={() => updateSettings({ defaultReasoningMode: 'auto' })}
+                    className={`
+                    flex items-center gap-3 p-4 rounded-lg border transition-all
+                    ${
+                        settings.defaultReasoningMode === 'auto'
+                            ? 'border-[var(--accent-blue)] bg-[var(--accent-blue-bg)]'
+                            : 'border-[var(--border)] hover:border-[var(--border-hover)]'
+                    }
+                  `}
+                >
+                  <ThinkingIcon
+                      size={24}
+                      className={
+                        settings.defaultReasoningMode === 'auto'
+                            ? 'text-[var(--accent-blue)]'
+                            : 'text-[var(--foreground-muted)]'
+                      }
+                  />
+                  <div className="text-left">
+                    <p className="font-medium text-[var(--foreground)]">Auto</p>
+                    <p className="text-xs text-[var(--foreground-muted)]">Automatic selection</p>
+                  </div>
+                </button>
                 <button
                   onClick={() => updateSettings({ defaultReasoningMode: 'fast' })}
                   className={`
@@ -112,7 +136,7 @@ export default function SettingsPage() {
                     }
                   `}
                 >
-                  <ThinkingIcon
+                  <Brain
                     size={24}
                     className={
                       settings.defaultReasoningMode === 'extended'
@@ -121,7 +145,7 @@ export default function SettingsPage() {
                     }
                   />
                   <div className="text-left">
-                    <p className="font-medium text-[var(--foreground)]">Extended Thinking</p>
+                    <p className="text-[0.85rem] font-medium text-[var(--foreground)]">Extended Thinking</p>
                     <p className="text-xs text-[var(--foreground-muted)]">Show reasoning</p>
                   </div>
                 </button>

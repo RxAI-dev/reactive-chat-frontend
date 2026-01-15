@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useAppStore } from '@/store';
 import { Button } from '@/components/ui/button';
-import { Send, ThinkingIcon, Zap } from '@/components/ui/icons';
+import {Brain, Send, ThinkingIcon, Zap} from '@/components/ui/icons';
 
 interface ChatInputProps {
   onSend: (message: string, useThinking: boolean) => void;
@@ -13,7 +13,7 @@ interface ChatInputProps {
 export function ChatInput({ onSend, disabled = false }: ChatInputProps) {
   const { settings, streaming } = useAppStore();
   const [message, setMessage] = useState('');
-  const [useThinking, setUseThinking] = useState(settings.defaultReasoningMode === 'extended');
+  const [reasoningMode, setReasoningMode] = useState(settings.defaultReasoningMode);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Auto-resize textarea
@@ -26,7 +26,16 @@ export function ChatInput({ onSend, disabled = false }: ChatInputProps) {
 
   const handleSubmit = () => {
     if (message.trim() && !disabled && !streaming.isStreaming) {
-      onSend(message.trim(), useThinking);
+      let mode = reasoningMode;
+      if (reasoningMode === 'auto') {
+        if (Math.random() < 0.5) {
+          mode = 'extended';
+        } else {
+          mode = 'fast';
+        }
+      }
+
+      onSend(message.trim(), mode === 'extended');
       setMessage('');
       if (textareaRef.current) {
         textareaRef.current.style.height = 'auto';
@@ -47,12 +56,27 @@ export function ChatInput({ onSend, disabled = false }: ChatInputProps) {
         {/* Reasoning mode toggle */}
         <div className="flex items-center gap-2 mb-3">
           <button
-            onClick={() => setUseThinking(false)}
+              onClick={() => setReasoningMode('auto')}
+              className={`
+              flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium
+              transition-colors duration-150
+              ${
+                  reasoningMode === 'auto'
+                      ? 'bg-[var(--accent-blue-bg)] text-[var(--accent-blue)]'
+                      : 'text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:bg-[var(--sidebar-item-hover)]'
+              }
+            `}
+          >
+            <ThinkingIcon size={14} />
+            <span>Auto</span>
+          </button>
+          <button
+            onClick={() => setReasoningMode('fast')}
             className={`
               flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium
               transition-colors duration-150
               ${
-                !useThinking
+                reasoningMode === 'fast'
                   ? 'bg-[var(--accent-green-bg)] text-[var(--accent-green)]'
                   : 'text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:bg-[var(--sidebar-item-hover)]'
               }
@@ -62,18 +86,18 @@ export function ChatInput({ onSend, disabled = false }: ChatInputProps) {
             <span>Fast Answer</span>
           </button>
           <button
-            onClick={() => setUseThinking(true)}
+            onClick={() => setReasoningMode('extended')}
             className={`
               flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium
               transition-colors duration-150
               ${
-                useThinking
+                reasoningMode === 'extended'
                   ? 'bg-[var(--accent-purple-bg)] text-[var(--accent-purple)]'
                   : 'text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:bg-[var(--sidebar-item-hover)]'
               }
             `}
           >
-            <ThinkingIcon size={14} />
+            <Brain size={14} />
             <span>Extended Thinking</span>
           </button>
         </div>
@@ -86,7 +110,7 @@ export function ChatInput({ onSend, disabled = false }: ChatInputProps) {
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={
-              useThinking
+              reasoningMode === 'extended'
                 ? 'Ask a question (Extended Thinking enabled)...'
                 : 'Ask a question...'
             }
@@ -111,16 +135,21 @@ export function ChatInput({ onSend, disabled = false }: ChatInputProps) {
 
         {/* Info text */}
         <p className="mt-2 text-xs text-[var(--foreground-muted)] text-center">
-          {useThinking ? (
+          {reasoningMode === 'extended' ? (
             <>
               <span className="text-[var(--accent-purple)]">[T]</span> Extended thinking mode
               enabled - model will show reasoning process
             </>
-          ) : (
+          ) : reasoningMode === 'fast' ? (
             <>
               <span className="text-[var(--accent-green)]">[A]</span> Fast answer mode - direct
               response without extended reasoning
             </>
+          ) : (
+              <>
+                <span className="text-[var(--accent-blue)]">[A/T]</span> Auto routing mode - model
+                decide which mode to use based on query
+              </>
           )}
         </p>
       </div>
