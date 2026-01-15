@@ -6,7 +6,7 @@ import { useAppStore } from '@/store';
 import { MainLayout } from '@/components/layout/main-layout';
 import { EmptyChat } from '@/components/chat/message';
 import { Button } from '@/components/ui/button';
-import {Plus, MemoryIcon, Bot, Zap, Database, Clock, BetaLogo} from '@/components/ui/icons';
+import {Plus, MemoryIcon, Bot, Zap, Database, Clock, BetaLogo, ReactiveAILogo} from '@/components/ui/icons';
 
 export default function ChatPage() {
   const router = useRouter();
@@ -44,8 +44,9 @@ export default function ChatPage() {
         {/* Welcome content */}
         <div className="max-w-2xl text-center">
           {/* Logo animation */}
-          <div className="rounded-full flex items-center justify-center mx-auto mb-8">
-            <BetaLogo size={300} className="rounded-lg" />
+          <div className="rounded-full flex items-center justify-center mx-auto mb-8 gap-4">
+            <ReactiveAILogo size={200} className="rounded-lg" />
+            <BetaLogo size={200} className="rounded-lg" />
           </div>
 
           <h1 className="text-3xl font-bold text-[var(--foreground)] mb-4">

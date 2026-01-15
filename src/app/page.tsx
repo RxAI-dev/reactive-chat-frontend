@@ -10,7 +10,7 @@ import {
   Zap,
   Database,
   Clock,
-  Sparkles,
+  Sparkles, BetaLogo,
 } from '@/components/ui/icons';
 
 export default function HomePage() {
@@ -51,8 +51,9 @@ export default function HomePage() {
         <div className="max-w-4xl text-center">
           {/* Logo */}
           <div className="inline-block mb-8">
-            <div className="flex items-center justify-center">
-              <ReactiveAILogo size={200} />
+            <div className="flex items-center justify-center gap-4">
+              <ReactiveAILogo size={200} className="rounded-lg" />
+              <BetaLogo size={200} className="rounded-lg" />
             </div>
           </div>
 
@@ -82,22 +83,6 @@ export default function HomePage() {
               <Sparkles size={20} />
               Documentation
             </Button>
-          </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-6 max-w-lg mx-auto mb-12">
-            <div className="text-center">
-              <p className="text-2xl font-bold gradient-text">up to 3x</p>
-              <p className="text-sm text-[var(--foreground-muted)]">Faster Training with SQA</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold text-[var(--foreground)]">∞</p>
-              <p className="text-sm text-[var(--foreground-muted)]">Infinite Context</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold gradient-text">2026</p>
-              <p className="text-sm text-[var(--foreground-muted)]">Reactor AGI Target</p>
-            </div>
           </div>
 
           {/* Feature Cards */}
@@ -139,42 +124,6 @@ export default function HomePage() {
                 RxLMs are N times cheaper than LLMs, where N is the number of messages in
                 conversation.
               </p>
-            </div>
-          </div>
-
-          {/* Available Products */}
-          <div className="space-y-4">
-            <div className="p-4 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)]">
-              <p className="text-sm text-[var(--foreground-muted)] mb-3">Currently Available:</p>
-              <div className="flex flex-wrap gap-2 justify-center">
-                <span className="px-3 py-1 rounded-full bg-[var(--accent-yellow-bg)] text-[var(--accent-yellow)] text-sm">
-                  Sparse Query Attention
-                </span>
-                <span className="px-3 py-1 rounded-full bg-[var(--accent-green-bg)] text-[var(--accent-green)] text-sm">
-                  RxNN Framework
-                </span>
-                <span className="px-3 py-1 rounded-full bg-[var(--accent-red-bg)] text-[var(--accent-red)] text-sm">
-                  Reactive Transformer PoC
-                </span>
-              </div>
-            </div>
-
-            <div className="p-4 rounded-xl bg-[var(--background-secondary)] border border-[var(--border)]">
-              <p className="text-sm text-[var(--foreground-muted)] mb-3">Projects In Progress:</p>
-              <div className="flex flex-wrap gap-2 justify-center">
-                <span className="px-3 py-1 rounded-full bg-[var(--accent-purple-bg)] text-[var(--accent-purple)] text-sm">
-                  Reactive Transformer MVP
-                </span>
-                <span className="px-3 py-1 rounded-full bg-[var(--accent-green-bg)] text-[var(--accent-green)] text-sm">
-                  Preactor
-                </span>
-                <span className="px-3 py-1 rounded-full bg-[var(--accent-red-bg)] text-[var(--accent-red)] text-sm">
-                  Reactor AGI
-                </span>
-                <span className="px-3 py-1 rounded-full bg-[var(--accent-blue-bg)] text-[var(--accent-blue)] text-sm">
-                  Reactive Cloud
-                </span>
-              </div>
             </div>
           </div>
         </div>

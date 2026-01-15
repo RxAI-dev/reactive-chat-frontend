@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useAppStore } from '@/store';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ReactiveAILogo, Mail, User, AlertCircle, ArrowRight } from '@/components/ui/icons';
+import {ReactiveAILogo, Mail, User, AlertCircle, ArrowRight, BetaLogo} from '@/components/ui/icons';
 import { Lock } from 'lucide-react';
 
 export default function RegisterPage() {
@@ -66,8 +66,9 @@ export default function RegisterPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center mb-4">
-            <ReactiveAILogo size={64} />
+          <div className="inline-flex items-center justify-center mb-4 gap-4">
+            <ReactiveAILogo size={200} className="rounded-lg" />
+            <BetaLogo size={200} className="rounded-lg" />
           </div>
           <h1 className="text-2xl font-bold text-[var(--foreground)]">
             Create your <span className="gradient-text">RxT-Beta</span> account

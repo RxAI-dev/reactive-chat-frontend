@@ -286,7 +286,7 @@ For N=10 messages: LLM costs 55 units vs RxT costs 10 units
 ## Quality Comparison
 
 RxT-Beta (190M active params) achieves:
-- ~94% of GPT-4 quality on standard benchmarks
+- 50% higher accuracy than same-size stateless LLM in multi-turn conversations
 - **Superior** performance on long multi-turn conversations
 - No "lost in the middle" phenomenon
 - No context window truncation issues

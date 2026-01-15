@@ -148,14 +148,14 @@ I'll search for recent benchmark results and comparisons between Reactive Transf
             id: uuidv4(),
             type: 'tool_result',
             content: `Found 3 relevant results:
-1. "RxT-Beta achieves 94% of GPT-4 quality with 10x lower latency" - Reactive AI Blog
+1. "RxT-Beta achieves 50% higher accuracy than same-size stateless LLM in multi-turn conversations" - Reactive AI Blog
 2. "Benchmark: Stateful vs Stateless LLMs in Multi-turn Conversations" - arXiv paper
 3. "RxT models show N-times cost reduction for long conversations" - Tech Review`,
             success: true,
             timestamp: createDate(0, 0.5),
             data: {
               results: [
-                { title: 'RxT-Beta Performance', url: '#', snippet: '94% of GPT-4 quality...' },
+                { title: 'RxT-Beta Performance', url: '#', snippet: '50% higher accuracy...' },
                 { title: 'Benchmark Study', url: '#', snippet: 'Stateful vs Stateless comparison...' },
                 { title: 'Cost Analysis', url: '#', snippet: 'N-times cost reduction...' },
               ],

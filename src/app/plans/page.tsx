@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useAppStore } from '@/store';
 import { mockPlans } from '@/lib/mock-data';
 import { Button } from '@/components/ui/button';
-import { ReactiveAILogo, Check, ArrowRight, Zap, Sparkles } from '@/components/ui/icons';
+import {ReactiveAILogo, Check, ArrowRight, Zap, Sparkles, BetaLogo} from '@/components/ui/icons';
 
 export default function PlansPage() {
   const router = useRouter();
@@ -21,8 +21,9 @@ export default function PlansPage() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center mb-4">
-            <ReactiveAILogo size={48} />
+          <div className="inline-flex items-center justify-center mb-4 gap-4">
+            <ReactiveAILogo size={200} className="rounded-lg" />
+            <BetaLogo size={200} className="rounded-lg" />
           </div>
           <h1 className="text-3xl font-bold text-[var(--foreground)] mb-3">
             Choose Your <span className="gradient-text">Plan</span>
