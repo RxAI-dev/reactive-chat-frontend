@@ -231,7 +231,8 @@ export default function SettingsPage() {
               <div className="space-y-3">
                 {availableTools.map((tool) => {
                   const ToolIcon = getToolIcon(tool.icon);
-                  const isEnabled = settings.enabledTools.includes(tool.id);
+                  const enabledToolIds = settings.enabledTools || [];
+                  const isEnabled = enabledToolIds.includes(tool.id);
                   return (
                     <div
                       key={tool.id}
@@ -281,7 +282,7 @@ export default function SettingsPage() {
                 })}
               </div>
               <p className="text-xs text-[var(--foreground-muted)] mt-4">
-                {settings.enabledTools.length} of {availableTools.length} tools enabled
+                {(settings.enabledTools || []).length} of {availableTools.length} tools enabled
               </p>
             </div>
           </section>
