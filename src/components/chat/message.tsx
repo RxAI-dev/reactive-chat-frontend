@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { format } from 'date-fns';
-import { Interaction, ToolCallMessage } from '@/types';
+import { Interaction, ToolCallMessage, ToolUseMessage, ToolResultData } from '@/types';
 import {
   User,
   Bot,
@@ -13,6 +13,7 @@ import {
   ThinkingIcon,
   Terminal,
   RefreshCw,
+  Wrench,
 } from '@/components/ui/icons';
 
 interface InteractionDisplayProps {
@@ -26,10 +27,48 @@ export function InteractionDisplay({
   isStreaming = false,
   streamingPhase = null,
 }: InteractionDisplayProps) {
+  // Handle 'tool_result' type interactions (initiated by tool results)
+  if (interaction.type === 'tool_result' && interaction.toolUse) {
+    return (
+      <div className="animate-slideIn">
+        {/* Tool Use (Tool results that initiated this interaction) */}
+        <ToolUseDisplay
+          toolUse={interaction.toolUse}
+          isStreaming={isStreaming && streamingPhase === 'tool_result'}
+        />
+
+        {/* Thinking (if present) */}
+        {interaction.thinking && (
+          <ThinkingMessage
+            content={interaction.thinking.content}
+            isStreaming={isStreaming && streamingPhase === 'thinking'}
+          />
+        )}
+
+        {/* Answer (summary of tool results) */}
+        {interaction.answer && (
+          <AnswerMessage
+            content={interaction.answer.content}
+            timestamp={interaction.answer.timestamp}
+            isStreaming={isStreaming && streamingPhase === 'answer'}
+          />
+        )}
+
+        {/* Chained tool calls (if present) */}
+        {interaction.toolCalls?.map((toolCall) => (
+          <ToolCallDisplay key={toolCall.id} toolCall={toolCall} />
+        ))}
+      </div>
+    );
+  }
+
+  // Handle 'query' type interactions (initiated by user query)
   return (
     <div className="animate-slideIn">
       {/* Query (User message) */}
-      <QueryMessage content={interaction.query.content} timestamp={interaction.query.timestamp} />
+      {interaction.query && (
+        <QueryMessage content={interaction.query.content} timestamp={interaction.query.timestamp} />
+      )}
 
       {/* Thinking (if present) */}
       {interaction.thinking && (
@@ -48,7 +87,7 @@ export function InteractionDisplay({
         />
       )}
 
-      {/* Tool calls */}
+      {/* Tool calls (triggers next tool_result interaction) */}
       {interaction.toolCalls?.map((toolCall) => (
         <ToolCallDisplay key={toolCall.id} toolCall={toolCall} />
       ))}
@@ -225,10 +264,13 @@ function formatInlineMarkdown(text: string): React.ReactNode {
 
 interface ToolCallDisplayProps {
   toolCall: ToolCallMessage;
+  showResult?: boolean;
 }
 
-function ToolCallDisplay({ toolCall }: ToolCallDisplayProps) {
+function ToolCallDisplay({ toolCall, showResult = false }: ToolCallDisplayProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const hasResult = toolCall.toolResult;
+  const isExecuting = !hasResult;
 
   return (
     <div className="mb-3 ml-11">
@@ -240,14 +282,12 @@ function ToolCallDisplay({ toolCall }: ToolCallDisplayProps) {
         <span className="text-sm font-medium text-[var(--accent-blue)]">
           Tool Call: {toolCall.toolName}
         </span>
-        {toolCall.toolResult ? (
-          toolCall.toolResult.success ? (
-            <Check size={14} className="text-[var(--accent-green)] ml-auto" />
-          ) : (
-            <RefreshCw size={14} className="text-[var(--accent-red)] ml-auto" />
-          )
-        ) : (
+        {isExecuting ? (
           <RefreshCw size={14} className="text-[var(--accent-blue)] ml-auto animate-spin" />
+        ) : (
+          <span className="text-xs text-[var(--foreground-muted)] ml-auto">
+            awaiting result...
+          </span>
         )}
         {isExpanded ? (
           <ChevronDown size={14} className="text-[var(--accent-blue)]" />
@@ -266,8 +306,8 @@ function ToolCallDisplay({ toolCall }: ToolCallDisplayProps) {
             </pre>
           </div>
 
-          {/* Tool result */}
-          {toolCall.toolResult && (
+          {/* Tool result - only shown if showResult is true (legacy mode) */}
+          {showResult && toolCall.toolResult && (
             <div
               className={`px-4 py-3 rounded-lg ${
                 toolCall.toolResult.success
@@ -281,6 +321,120 @@ function ToolCallDisplay({ toolCall }: ToolCallDisplayProps) {
               </pre>
             </div>
           )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Tool Use Display - Shows tool results that initiated a tool_result interaction
+// Collapsed by default as per RxT interaction template
+interface ToolUseDisplayProps {
+  toolUse: ToolUseMessage;
+  isStreaming?: boolean;
+}
+
+function ToolUseDisplay({ toolUse, isStreaming = false }: ToolUseDisplayProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const toolCount = toolUse.toolResults.length;
+  const allSuccessful = toolUse.toolResults.every((r) => r.result.success);
+
+  return (
+    <div className="mb-3">
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className={`
+          flex items-center gap-2 px-3 py-2 rounded-lg w-full text-left transition-colors
+          ${allSuccessful
+            ? 'bg-[var(--accent-green-bg)] hover:bg-[var(--accent-green-bg)]'
+            : 'bg-[var(--accent-red-bg)] hover:bg-[var(--accent-red-bg)]'
+          }
+        `}
+      >
+        <Wrench size={16} className={allSuccessful ? 'text-[var(--accent-green)]' : 'text-[var(--accent-red)]'} />
+        <span className={`text-sm font-medium ${allSuccessful ? 'text-[var(--accent-green)]' : 'text-[var(--accent-red)]'}`}>
+          Tool Results ({toolCount} {toolCount === 1 ? 'tool' : 'tools'})
+        </span>
+        {isStreaming && (
+          <span className="text-xs animate-pulse ml-1">processing...</span>
+        )}
+        {allSuccessful ? (
+          <Check size={14} className="text-[var(--accent-green)] ml-auto" />
+        ) : (
+          <RefreshCw size={14} className="text-[var(--accent-red)] ml-auto" />
+        )}
+        {isExpanded ? (
+          <ChevronDown size={14} className={allSuccessful ? 'text-[var(--accent-green)]' : 'text-[var(--accent-red)]'} />
+        ) : (
+          <ChevronRight size={14} className={allSuccessful ? 'text-[var(--accent-green)]' : 'text-[var(--accent-red)]'} />
+        )}
+      </button>
+
+      {isExpanded && (
+        <div className="mt-2 space-y-3 ml-4">
+          {toolUse.toolResults.map((toolResult, index) => (
+            <ToolResultItemDisplay key={toolResult.id} toolResult={toolResult} index={index} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Individual tool result display within ToolUseDisplay
+interface ToolResultItemDisplayProps {
+  toolResult: ToolResultData;
+  index: number;
+}
+
+function ToolResultItemDisplay({ toolResult, index }: ToolResultItemDisplayProps) {
+  const [isExpanded, setIsExpanded] = useState(true);
+
+  return (
+    <div className="rounded-lg border border-[var(--border)] overflow-hidden">
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="flex items-center gap-2 px-3 py-2 bg-[var(--background-secondary)] w-full text-left"
+      >
+        <Terminal size={14} className="text-[var(--accent-blue)]" />
+        <span className="text-sm font-medium text-[var(--foreground)]">
+          {toolResult.toolName}
+        </span>
+        {toolResult.result.success ? (
+          <Check size={12} className="text-[var(--accent-green)] ml-auto" />
+        ) : (
+          <RefreshCw size={12} className="text-[var(--accent-red)] ml-auto" />
+        )}
+        {isExpanded ? (
+          <ChevronDown size={12} className="text-[var(--foreground-muted)]" />
+        ) : (
+          <ChevronRight size={12} className="text-[var(--foreground-muted)]" />
+        )}
+      </button>
+
+      {isExpanded && (
+        <div className="p-3 space-y-2 bg-[var(--background)]">
+          {/* Tool arguments */}
+          <div className="px-3 py-2 rounded bg-[var(--background-tertiary)]">
+            <p className="text-xs text-[var(--foreground-muted)] mb-1">Arguments:</p>
+            <pre className="text-xs text-[var(--foreground-secondary)]">
+              {JSON.stringify(toolResult.toolArgs, null, 2)}
+            </pre>
+          </div>
+
+          {/* Result */}
+          <div
+            className={`px-3 py-2 rounded ${
+              toolResult.result.success
+                ? 'bg-[var(--accent-green-bg)]'
+                : 'bg-[var(--accent-red-bg)]'
+            }`}
+          >
+            <p className="text-xs text-[var(--foreground-muted)] mb-1">Result:</p>
+            <pre className="text-xs text-[var(--foreground-secondary)] whitespace-pre-wrap">
+              {toolResult.result.content}
+            </pre>
+          </div>
         </div>
       )}
     </div>

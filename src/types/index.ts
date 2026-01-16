@@ -30,14 +30,38 @@ export interface Conversation {
 }
 
 // Interaction types (RxT processes single interactions, not full chat history)
+// Two types: 'query' (user-initiated) and 'tool_result' (tool response-initiated)
 export interface Interaction {
   id: string;
   conversationId: string;
-  query: QueryMessage;
+  type: 'query' | 'tool_result';
+  // For 'query' type interactions - user's message
+  query?: QueryMessage;
+  // For 'tool_result' type interactions - tool results that triggered this interaction
+  toolUse?: ToolUseMessage;
   thinking?: ThinkingMessage;
   answer: AnswerMessage;
+  // Tool calls made during this interaction (triggers next tool_result interaction)
   toolCalls?: ToolCallMessage[];
   timestamp: Date;
+}
+
+// Tool use message - represents tool results that initiated a tool_result interaction
+export interface ToolUseMessage extends BaseMessage {
+  type: 'tool_use';
+  toolResults: ToolResultData[];
+}
+
+// Individual tool result data within a ToolUseMessage
+export interface ToolResultData {
+  id: string;
+  toolName: string;
+  toolArgs: Record<string, unknown>;
+  result: {
+    success: boolean;
+    content: string;
+    data?: unknown;
+  };
 }
 
 // Message types based on Interaction Template
@@ -98,6 +122,15 @@ export interface Plan {
   maxTokensPerInteraction: number;
 }
 
+// Tool definition for available tools
+export interface Tool {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  isEnabled: boolean;
+}
+
 // Settings types
 export interface Settings {
   theme: 'dark' | 'light' | 'system';
@@ -106,6 +139,8 @@ export interface Settings {
   streamingSpeed: 'slow' | 'normal' | 'fast';
   showThinkingProcess: boolean;
   notifications: boolean;
+  // Available tools and their enabled state
+  enabledTools: string[]; // Array of tool IDs that are enabled
 }
 
 // Streaming state for mock

@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import NextImage from 'next/image';
 import {
   MessageSquare,
   Settings,
@@ -44,6 +44,11 @@ import {
   Mail,
   Calendar,
   CreditCard,
+  Wrench,
+  Calculator,
+  File,
+  Image as ImageIcon,
+  ChevronUp,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -91,12 +96,17 @@ export {
   Mail,
   Calendar,
   CreditCard,
+  Wrench,
+  Calculator,
+  File,
+  ImageIcon,
+  ChevronUp,
 };
 
 export type { LucideIcon };
 
 export const ReactiveAILogo = ({ className = '', size = 40 }: { className?: string; size?: number }) => (
-    <Image
+    <NextImage
         src="/logo_rxai.png"
         alt="Reactive AI"
         width={size}
@@ -106,7 +116,7 @@ export const ReactiveAILogo = ({ className = '', size = 40 }: { className?: stri
 );
 
 export const BetaLogo = ({ className = '', size = 40 }: { className?: string; size?: number }) => (
-    <Image
+    <NextImage
         src="/logo_rxt_beta.png"
         alt="Reactive AI"
         width={size}
