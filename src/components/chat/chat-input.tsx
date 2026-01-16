@@ -43,9 +43,10 @@ export function ChatInput({ onSend, disabled = false }: ChatInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const toolMenuRef = useRef<HTMLDivElement>(null);
 
-  // Get enabled tools from settings
+  // Get enabled tools from settings (with defensive check for undefined)
+  const enabledToolIds = settings.enabledTools || [];
   const enabledTools = availableTools.filter((tool) =>
-    settings.enabledTools.includes(tool.id)
+    enabledToolIds.includes(tool.id)
   );
 
   // Auto-resize textarea

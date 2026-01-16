@@ -296,7 +296,7 @@ export const useAppStore = create<AppState>()(
 
       toggleTool: (toolId: string) => {
         set((state) => {
-          const enabledTools = state.settings.enabledTools;
+          const enabledTools = state.settings.enabledTools || [];
           const isEnabled = enabledTools.includes(toolId);
           const newEnabledTools = isEnabled
             ? enabledTools.filter((id) => id !== toolId)
@@ -351,6 +351,21 @@ export const useAppStore = create<AppState>()(
         isAuthenticated: state.isAuthenticated,
         user: state.user,
       }),
+      // Merge persisted state with defaults to handle new properties
+      merge: (persistedState, currentState) => {
+        const persisted = persistedState as Partial<AppState> | undefined;
+        return {
+          ...currentState,
+          ...persisted,
+          // Deep merge settings to preserve new defaults
+          settings: {
+            ...currentState.settings,
+            ...(persisted?.settings || {}),
+            // Ensure enabledTools always has a default value
+            enabledTools: persisted?.settings?.enabledTools ?? currentState.settings.enabledTools,
+          },
+        };
+      },
     }
   )
 );
