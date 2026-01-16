@@ -4,11 +4,39 @@ import { useAppStore } from '@/store';
 import { MainLayout } from '@/components/layout/main-layout';
 import { useTheme } from '@/components/ui/theme-provider';
 import { Button } from '@/components/ui/button';
-import {Moon, Sun, Monitor, Zap, ThinkingIcon, Bell, Globe, Brain} from '@/components/ui/icons';
+import {
+  Moon,
+  Sun,
+  Monitor,
+  Zap,
+  ThinkingIcon,
+  Bell,
+  Globe,
+  Brain,
+  Wrench,
+  Search,
+  Code,
+  Calculator,
+  File,
+  ImageIcon,
+} from '@/components/ui/icons';
+
+// Tool icon mapping
+const toolIcons: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
+  search: Search,
+  code: Code,
+  calculator: Calculator,
+  file: File,
+  image: ImageIcon,
+};
 
 export default function SettingsPage() {
-  const { settings, updateSettings, user } = useAppStore();
+  const { settings, updateSettings, user, availableTools, toggleTool } = useAppStore();
   const { theme, setTheme } = useTheme();
+
+  const getToolIcon = (iconName: string) => {
+    return toolIcons[iconName] || Wrench;
+  };
 
   const themes = [
     { id: 'light' as const, label: 'Light', icon: Sun },
@@ -187,6 +215,74 @@ export default function SettingsPage() {
                   </button>
                 ))}
               </div>
+            </div>
+          </section>
+
+          {/* Tools Section */}
+          <section className="mb-8">
+            <h2 className="text-lg font-semibold text-[var(--foreground)] mb-4 flex items-center gap-2">
+              <Wrench size={20} />
+              Available Tools
+            </h2>
+            <div className="bg-[var(--card-bg)] border border-[var(--border)] rounded-xl p-4">
+              <p className="text-sm text-[var(--foreground-muted)] mb-4">
+                Enable or disable tools that RxT-Beta can use during conversations. Enabled tools will appear in the chat input selector.
+              </p>
+              <div className="space-y-3">
+                {availableTools.map((tool) => {
+                  const ToolIcon = getToolIcon(tool.icon);
+                  const isEnabled = settings.enabledTools.includes(tool.id);
+                  return (
+                    <div
+                      key={tool.id}
+                      className={`
+                        flex items-center justify-between p-3 rounded-lg border transition-all
+                        ${isEnabled
+                          ? 'border-[var(--accent-green)] bg-[var(--accent-green-bg)]'
+                          : 'border-[var(--border)] hover:border-[var(--border-hover)]'
+                        }
+                      `}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`
+                          w-10 h-10 rounded-lg flex items-center justify-center
+                          ${isEnabled ? 'bg-[var(--accent-green)]' : 'bg-[var(--background-secondary)]'}
+                        `}>
+                          <ToolIcon
+                            size={20}
+                            className={isEnabled ? 'text-white' : 'text-[var(--foreground-muted)]'}
+                          />
+                        </div>
+                        <div>
+                          <p className={`font-medium ${isEnabled ? 'text-[var(--foreground)]' : 'text-[var(--foreground-muted)]'}`}>
+                            {tool.name}
+                          </p>
+                          <p className="text-xs text-[var(--foreground-muted)]">
+                            {tool.description}
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => toggleTool(tool.id)}
+                        className={`
+                          w-12 h-6 rounded-full transition-colors relative
+                          ${isEnabled ? 'bg-[var(--accent-green)]' : 'bg-[var(--border)]'}
+                        `}
+                      >
+                        <span
+                          className={`
+                            absolute top-1 w-4 h-4 rounded-full bg-white transition-transform
+                            ${isEnabled ? 'translate-x-7' : 'translate-x-1'}
+                          `}
+                        />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+              <p className="text-xs text-[var(--foreground-muted)] mt-4">
+                {settings.enabledTools.length} of {availableTools.length} tools enabled
+              </p>
             </div>
           </section>
 

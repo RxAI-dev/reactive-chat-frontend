@@ -9,8 +9,9 @@ import {
   Agent,
   Settings,
   StreamingState,
+  Tool,
 } from '@/types';
-import { mockMemoryStates, mockAgents } from '@/lib/mock-data';
+import { mockMemoryStates, mockAgents, mockTools } from '@/lib/mock-data';
 
 interface AppState {
   // Auth state
@@ -45,6 +46,10 @@ interface AppState {
   agents: Agent[];
   activeAgentId: string | null;
   setActiveAgent: (id: string | null) => void;
+
+  // Tools
+  availableTools: Tool[];
+  toggleTool: (toolId: string) => void;
 
   // Streaming
   streaming: StreamingState;
@@ -286,6 +291,22 @@ export const useAppStore = create<AppState>()(
         set({ activeAgentId: id });
       },
 
+      // Tools
+      availableTools: mockTools,
+
+      toggleTool: (toolId: string) => {
+        set((state) => {
+          const enabledTools = state.settings.enabledTools;
+          const isEnabled = enabledTools.includes(toolId);
+          const newEnabledTools = isEnabled
+            ? enabledTools.filter((id) => id !== toolId)
+            : [...enabledTools, toolId];
+          return {
+            settings: { ...state.settings, enabledTools: newEnabledTools },
+          };
+        });
+      },
+
       // Streaming
       streaming: {
         isStreaming: false,
@@ -307,6 +328,7 @@ export const useAppStore = create<AppState>()(
         streamingSpeed: 'normal',
         showThinkingProcess: true,
         notifications: true,
+        enabledTools: ['web_search', 'code_interpreter'], // Default enabled tools
       },
 
       updateSettings: (updates: Partial<Settings>) => {
